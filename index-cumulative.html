@@ -1,0 +1,528 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Leaflet Graticule</title>
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.6.2/leaflet.css" />
+  <link href='https://api.mapbox.com/mapbox-assembly/v0.8.0/assembly.min.css' rel='stylesheet'>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+
+  <style type="text/css">
+    header {
+      background-image: url('images/bookshelf_new.png');
+      position: fixed;
+      width: 100%;
+      height: 100px;
+      background-color: #000000;
+      box-shadow: 0px 5px 5px black;
+      z-index: 800;
+    }
+
+    h1 {
+      font-size: 30px;
+      font-family: 'Montserrat', sans-serif;
+      display: inline-block;
+      color: white;
+      margin-left: 18px;
+      margin-right: 30px;
+      padding-top: 35px;
+      padding-bottom: 10px;
+    }
+
+    h3 {
+      font-size: 14px;
+      font-style: bold;
+      font-family: 'Montserrat', sans-serif;
+      padding-top: 5px;
+    }
+
+    h4 {
+      font-size: 12px;
+      font-family: 'Montserrat', sans-serif;
+      display: inline-block;
+      margin-right: 16px;
+      margin-left: 22px;
+      padding-bottom: 1px;
+      color: white;
+    }
+
+    body {
+      margin: 0px;
+      height: 100%;
+      width: 100%;
+      background: #FFFFF0;
+    }
+
+    #map {
+      position: fixed;
+      top: 100px;
+      bottom: 0px;
+      width: 100%;
+      background: white;
+      border-left: 1px solid gray;
+    }
+
+    #slider {
+      position: absolute;
+      height: 43px;
+      bottom: 0px;
+      left: 120px;
+      z-index: 1000;
+      background-color: white;
+      border-left: 1px solid;
+      border-right: 1px solid;
+      border-top: 1px solid;
+      border-bottom: 1px solid
+    }
+
+    #temporal {
+      background-color: white;
+      height: 43px
+    }
+
+    #main-map {
+      background-color: #008CBA;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 6px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 12px;
+      margin: 5px;
+      position: absolute;
+      top: 145px;
+      right: 10px;
+    }
+
+    #main-map:hover {
+      background-color: #72bcd4;
+    }
+
+    /* Set the styles for the choropleth legends */
+    .legend {
+      padding: 0px 6px;
+      padding-bottom: 6px;
+      background-color: #FFFFFF;
+      border-radius: 3px;
+      box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Set the styles for the color bands in the choropleth legends */
+    .legend i {
+      width: 50px;
+      height: 18px;
+      float: left;
+      margin-right: 25px;
+      opacity: 0.7;
+    }
+
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>THE UNIVERSITY OF IOWA INTERNATIONAL WRITING PROGRAM: 1966-PRESENT</h1><br>
+    <!--Map by <a target='blank' href='https://jebowe3.github.io/Map-Portfolio/'>Jay Bowen</a>, 2020 | Background image by <a target='blank' href='https://commons.wikimedia.org/w/index.php?curid=45194837'>Stewart Butterfield</a> - flickr, CC BY
+      2.0-->
+  </header>
+  <div id="contentcolumn">
+    <div id="map"></div>
+    <!-- ui slider -->
+    <div id='slider' class='range w300 round py6 border--gray-light px12 leaflet-control'>
+      <input type='range' min="1966" max="2016" value="1966" step="1" class="slider" />
+    </div>
+    <!-- end slider -->
+    <!-- temporal legend -->
+    <div id='temporal' class='py6 px12 border border--gray-light round bottom left wmax200'>
+      <h3 class='txt-bold'>Year: <span></span></h3>
+    </div>
+    <!-- end temporal -->
+    <div id="main-map" style="cursor: pointer" class="main-map" onclick="location.href='index.html'">Back to Main Map</div>
+  </div>
+  <script src="http://cdn.leafletjs.com/leaflet-0.6.2/leaflet-src.js"></script>
+  <script type="text/javascript" src="js/proj4js-compressed.js"></script>
+  <script type="text/javascript" src="js/proj4leaflet.js"></script>
+  <script type="text/javascript" src="js/L.Graticule.js"></script>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <!-- for statistics, classifications -->
+  <script src='js/simple-statistics.min.js'></script>
+  <script type="text/javascript">
+    // Sphere Mollweide: http://spatialreference.org/ref/esri/53009/
+    var crs = new L.Proj.CRS('ESRI:53009', '+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=6371000 +b=6371000 +units=m +no_defs', {
+      resolutions: [65536, 32768, 16384, 8192, 4096, 2048]
+    });
+
+    var map = L.map('map', {
+      crs: crs,
+      maxZoom: 5,
+      minZoom: 1,
+      zoomAnimation: false
+    });
+
+    L.graticule({
+      sphere: true,
+      style: {
+        color: '#777',
+        opacity: 1,
+        fillColor: '#ccf',
+        fillOpacity: 1,
+        weight: 2
+      }
+    }).addTo(map);
+
+    L.graticule({
+      style: {
+        color: '#777',
+        weight: 1,
+        opacity: 0.5
+      }
+    }).addTo(map);
+
+    // Fit the map to the world
+    map.fitWorld();
+
+    // Get slider max value for choropleth calculations
+    var named = document.getElementById("slider");
+    var tags = named.getElementsByTagName("input");
+    var maxYear;
+
+    for (var i = 0, n = tags.length; i < n; i = i + 1) {
+      maxYear = tags[i].max;
+    };
+
+    // Define a getOpacity function
+    function getOpacity(d) {
+      return d > 0 ? '1.0' :
+        '0.0';
+    }
+
+    // Define a getWeight function
+    function getWeight(d) {
+      return d > 0 ? '0.5' :
+        '0.0';
+    }
+
+    // Set the currentYear to whatever value is in the slider on load
+    var currentYear = $('.slider').val();
+
+    // Declare an empty variable outside the drawMap function for choroplethStops. This allows later functions to access fixed values.
+    var choroplethStops = [];
+
+    // Add a function to style the counties by their writer counts
+    function getColor(d) {
+      return d >= Math.round(ss.min(choroplethStops[6])) ? '#0f3034' :
+        d >= Math.round(ss.min(choroplethStops[5])) ? '#1C3F44' :
+        d >= Math.round(ss.min(choroplethStops[4])) ? '#30555A' :
+        d >= Math.round(ss.min(choroplethStops[3])) ? '#466A6F' :
+        d >= Math.round(ss.min(choroplethStops[2])) ? '#668488' :
+        d >= Math.round(ss.min(choroplethStops[1])) ? '#8BA0A2' :
+        d > 0 ? '#C4CED0' : // Make base greater than zero
+        '#1C00ff00';
+    }
+
+    // load the data asynchronously
+    d3.queue()
+      .defer(d3.json, 'data/Land_WGS84.geojson') // the continents, land masses
+      .defer(d3.json, 'data/Nations_Writers.json') // the historical countries layer
+      .defer(d3.csv, 'data/IWP_for_json.csv') // the centroids layer
+      .await(drawMap); // load the layers after the map loads
+
+    // define drawMap function
+    function drawMap(err, land, countries, cumulative) {
+
+      // Group most recent participant totals into 7 ckmeans categories using the simple-statistics JavaScript library
+      choroplethStops.push(...ss.ckmeans(countries.features.map(function(feature) {
+        return feature.properties['Participant_List_' + maxYear + '_subtotal']; // Run ckmeans on the most recent Participant_List property
+      }), 7)); // group into 7 ckmeans intervals
+
+      var earth = L.geoJson(land, {
+        style: function(feature) {
+          return {
+            stroke: 1,
+            color: 'grey',
+            strokeOpacity: 1,
+            weight: 1,
+            fillColor: '#fdf5e6',
+            fillOpacity: 1
+          }
+        }
+      }).addTo(map); // keeps the earth layer from being placed over the circle markers upon map load
+
+      var nations = L.geoJson(countries, {
+        style: function(feature) {
+          return {
+            stroke: 1,
+            color: 'grey',
+            strokeOpacity: getOpacity(feature.properties['Year_' + currentYear]),
+            weight: getWeight(feature.properties['Year_' + currentYear]),
+            fillColor: getColor(feature.properties['Participant_List_' + currentYear + '_subtotal']),
+            fillOpacity: getOpacity(feature.properties['Year_' + currentYear])
+          }
+        }
+      }).addTo(map); // keeps nations layer from being placed over circle markers upon map load
+
+      // Define a legend for choropleth nations
+      var nationLegend = L.control({
+        position: 'bottomright'
+      });
+
+      // Style the legend for choropleth nations
+      nationLegend.onAdd = function(map) {
+
+        var div = L.DomUtil.create('div', 'info legend'),
+          grades = [ss.min(choroplethStops[0]), ss.min(choroplethStops[1]), ss.min(choroplethStops[2]), ss.min(choroplethStops[3]), ss.min(choroplethStops[4]), ss.min(choroplethStops[5]), ss.min(choroplethStops[6])],
+          labels = ["<h5 style='font-weight:bold'>Total Participants</h5>"];
+
+        // loop through the intervals and generate a label with a colored square for each interval
+        for (var i = 0; i < grades.length; i++) {
+          div.innerHTML +=
+            labels.push('<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+              grades[i] + (grades[i + 1] ? '&ndash;' + (grades[i + 1] - 1) : '+')); // grades[i + 1] - 1 keeps the last number of each legend interval from matching the first number of the following interval
+        }
+        div.innerHTML = labels.join('<br>');
+        return div;
+      };
+
+      nationLegend.addTo(map); // Add this legend to the map
+
+      drawCircles(cumulative, nations);
+
+    }; // end drawMap function
+
+    // calculate circle radii
+    function calcRadius(val) {
+      var radius = Math.sqrt(val / Math.PI);
+      return radius * 16; // adjust 16 as a scale factor
+    }; // end calcRadius() function
+
+    // draw proportional circles
+    function drawCircles(cumulative, nations) {
+
+      // build the geojson from the csv data
+      var geojson = {
+        "type": "FeatureCollection",
+        "features": []
+      }
+
+      var feature;
+
+      cumulative.forEach(function(datum) {
+
+        // add coordinate data as points
+        feature = {
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [datum.long, datum.lat]
+          },
+          "properties": datum
+        }
+
+        // push points to a geojson feature collection
+        geojson.features.push(feature);
+
+      });
+
+      // define a circle variable for each year
+      var cumulativePart = L.geoJson(geojson, {
+
+        pointToLayer: function(feature, ll) {
+
+          return L.circleMarker(ll, {
+            color: '#FF8C00',
+            fillColor: '#FF8C00',
+            opacity: 1,
+            weight: 1,
+            fillOpacity: 0.25
+          })
+        },
+
+        // bind popup content to each layer feature
+        onEachFeature: function(feature, layer) {
+
+          // define properties
+          var props = layer.feature.properties;
+          // define circle radius with a formula
+          var radius = calcRadius(Number(props.writer_total_cumulative));
+          // bind a popup with the cumulative popup content
+          layer.bindPopup(props.popup_cumulative, {
+            maxHeight: 300,
+            maxWidth: 350
+          });
+          // give the layer a subtle style on mouseover
+          layer.on("mouseover", function(e) {
+            layer.setStyle({
+              fillColor: '#fed8b1',
+            });
+          });
+          // return to the original style on mouseout
+          layer.on("mouseout", function(e) {
+            layer.setStyle({
+              fillColor: '#FF8C00',
+            });
+          });
+
+          // if the current year is greater than or equal to the min_year or
+          // if it is less than or equal to the max_year...
+          if (currentYear >= props.min_year && currentYear <= props.max_year) {
+            // set the radius using the variable above
+            layer.setRadius(radius);
+            layer.setStyle({
+              opacity: 1,
+              weight: 1,
+              fillOpacity: 0.25
+            });
+            // otherwise...
+          } else {
+            // set the radius to zero
+            layer.setRadius(0);
+            layer.setStyle({
+              opacity: 0,
+              weight: 0,
+              fillOpacity: 0
+            });
+          };
+
+        }
+
+      });
+
+      sequenceUI(cumulativePart, nations);
+      createTemporalLegend(currentYear); // produces temporal legend upon map loading
+      resizeCircles(cumulativePart, currentYear);
+
+      var overlays = {
+        "Participant Data": cumulativePart,
+      };
+
+      // all done with the layers, add them to layer control
+      L.control.layers(null, overlays, {
+        collapsed: false,
+      }).addTo(map);
+
+    }; // end drawCircles() function
+
+    // add a UI slider
+    function sequenceUI(cumulativePart, nations) {
+
+      // create Leaflet control for the slider
+      var sliderControl = L.control({
+        position: 'bottomleft',
+        follow: true
+      });
+
+      // add controls to the slider
+      sliderControl.onAdd = function(map) {
+
+        var controls = L.DomUtil.get("slider"); // get the style settings
+
+        // disable the mouse events
+        L.DomEvent.addListener(controls, 'mousedown', function(e) {
+          L.DomEvent.stopPropagation(e);
+        });
+
+        return controls; // return the style settings
+
+      }
+
+      // add the control to the map
+      sliderControl.addTo(map);
+
+      $('.slider')
+        .on('input change', function() {
+          var currentYear = $(this).val(); // identifies the year selected
+          createTemporalLegend(currentYear);
+          resizeCircles(cumulativePart, currentYear);
+          updateLayers(nations, currentYear);
+        });
+
+    }; // End sequenceUI function
+
+    // add a temporal legend in sync with the UI slider
+    function createTemporalLegend(currentYear) {
+
+      var temporalLegend = L.control({
+        position: 'bottomleft' // place the temporal legend at bottom left corner
+      });
+
+      // when added to the map
+      temporalLegend.onAdd = function(map) {
+
+        var div = L.DomUtil.get("temporal"); // get the style settings
+
+        // disable the mouse events
+        L.DomEvent.addListener(div, 'mousedown', function(e) {
+          L.DomEvent.stopPropagation(e);
+        });
+
+        return div; // return the style settings
+
+      }
+
+      $('#temporal span').html(currentYear); // change grade value to that currently selected by UI slider
+
+      temporalLegend.addTo(map); // add the temporal legend to the map
+
+    }; // end createTemporalLegend function
+
+    // resize our default circles based on cumulative incidents of election interference
+    function resizeCircles(cumulativePart, currentYear) {
+
+      cumulativePart.eachLayer(function(layer) {
+
+        // define properties
+        var props = layer.feature.properties;
+        // define circle radius with a formula
+        var radius = calcRadius(Number(props.writer_total_cumulative));
+
+        // if the current year is greater than or equal to the min_year or
+        // if it is less than or equal to the max_year...
+        if (currentYear >= props.min_year && currentYear <= props.max_year) {
+          // set the radius using the variable above
+          layer.setRadius(radius);
+          layer.setStyle({
+            opacity: 1,
+            weight: 1,
+            fillOpacity: 0.25
+          });
+          // otherwise...
+        } else {
+          // set the radius to zero
+          layer.setRadius(0);
+          layer.setStyle({
+            opacity: 0,
+            weight: 0,
+            fillOpacity: 0
+          });
+        };
+      });
+
+    }; // end resizeCircles() function
+
+    // update the nations choropleth layer
+    function updateLayers(nations, currentYear) {
+
+      // use the eachLayer method to access all objects of the nations layer
+      nations.eachLayer(function(layer) {
+
+        // dynamically set styles for all nations based on properties linked to
+        // the slider designated year using the the following "get" functions
+        layer.setStyle({
+          strokeOpacity: getOpacity(layer.feature.properties['Year_' + currentYear])
+        });
+        layer.setStyle({
+          weight: getWeight(layer.feature.properties['Year_' + currentYear])
+        });
+        layer.setStyle({
+          fillOpacity: getOpacity(layer.feature.properties['Year_' + currentYear])
+        });
+        layer.setStyle({
+          fillColor: getColor(layer.feature.properties['Participant_List_' + currentYear + '_subtotal'])
+        });
+      });
+
+    } // End updateLayers function
+  </script>
