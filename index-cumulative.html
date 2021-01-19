@@ -131,7 +131,7 @@
     <div id="map"></div>
     <!-- ui slider -->
     <div id='slider' class='range w300 round py6 border--gray-light px12 leaflet-control'>
-      <input type='range' min="1966" max="2016" value="1966" step="1" class="slider" />
+      <input type='range' min="1966" max="2020" value="1966" step="1" class="slider" />
     </div>
     <!-- end slider -->
     <!-- temporal legend -->
@@ -275,6 +275,8 @@
         var div = L.DomUtil.create('div', 'info legend'),
           grades = [ss.min(choroplethStops[0]), ss.min(choroplethStops[1]), ss.min(choroplethStops[2]), ss.min(choroplethStops[3]), ss.min(choroplethStops[4]), ss.min(choroplethStops[5]), ss.min(choroplethStops[6])],
           labels = ["<h5 style='font-weight:bold'>Total Participants</h5>"];
+
+          console.log(grades);
 
         // loop through the intervals and generate a label with a colored square for each interval
         for (var i = 0; i < grades.length; i++) {

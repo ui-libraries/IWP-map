@@ -196,6 +196,7 @@
                   <option value="2039">Djibouti</option>
                   <option value="1957">Ecuador</option>
                   <option value="1875">Egypt</option>
+                  <option value="2067">Eritrea</option>
                   <option value="1878">Estonia</option>
                   <option value="1866">Ethiopia</option>
                   <option value="1909">Fiji</option>
@@ -250,10 +251,12 @@
                   <option value="1917">Montenegro</option>
                   <option value="1874">Morocco</option>
                   <option value="1888">Mozambique</option>
+                  <option value="2068">Namibia</option>
                   <option value="1851">Nepal</option>
                   <option value="1967">Netherlands</option>
                   <option value="1932">New Zealand</option>
                   <option value="1858">Nicaragua</option>
+                  <option value="2069">Niger</option>
                   <option value="1916">Nigeria</option>
                   <option value="1920">Norway</option>
                   <option value="2015">Oman</option>
@@ -293,6 +296,7 @@
                   <option value="1902">Turkey</option>
                   <option value="1918">Uganda</option>
                   <option value="1870">Ukraine</option>
+                  <option value="2070">United Arab Emirates</option>
                   <option value="1884">United Kingdom</option>
                   <option value="1933">United States of America</option>
                   <option value="1891">Uruguay</option>
@@ -344,9 +348,9 @@
                   <option value="The Americas">The Americas </option>
                 </select>
               </li>
-              <li class="menu_item"><strong>Year of Residency:*</strong>&nbsp;&nbsp;
+              <li class="menu_item"><strong>Year of Residency:</strong>&nbsp;&nbsp;
                 <select id="residency">
-                  <option value="0" selected="selected">[any]</option>
+                  <option value="0">[any]</option>
                   <option value="1966">1966</option>
                   <option value="1967">1967</option>
                   <option value="1968">1968</option>
@@ -398,11 +402,20 @@
                   <option value="2014">2014</option>
                   <option value="2015">2015</option>
                   <option value="2016">2016</option>
+                  <option value="2017">2017</option>
+                  <option value="2018">2018</option>
+                  <option value="2019" selected="selected">2019</option>
+                  <option value="2020">2020</option>
                 </select><br>
-                <input type="radio" name="count_type" value="annual" class="in1">
+                <!-- Hide the following, if you are not allowing the user to switch between annual and cumulative results,
+                but rather only allowing for annual results. Otherwise, delete this and comment in the two radio inputs that follow.-->
+                <input type="hidden" name="count_type" value="annual" class="in1" checked="checked">
+                <!--
+                <input type="radio" name="count_type" value="annual" class="in1" checked="checked">
                 This year only&nbsp;&nbsp;&nbsp;
                 <input type="radio" name="count_type" value="cumulative" class="in1" checked="checked">
                 Cumulative<br>
+                -->
               </li>
               <li class="menu_item"><strong>Author Languages:</strong>
                 <input type="radio" name="multilingual" value="1" class="in1" checked="checked">
@@ -423,6 +436,7 @@
                   <option value="Bulgarian">Bulgarian </option>
                   <option value="Burmese">Burmese </option>
                   <option value="Catalan">Catalan </option>
+                  <option value="Chichewa">Chichewa </option>
                   <option value="Chinese">Chinese </option>
                   <option value="Croatian">Croatian </option>
                   <option value="Czech">Czech </option>
@@ -454,9 +468,11 @@
                   <option value="Macedonian">Macedonian </option>
                   <option value="Malay">Malay </option>
                   <option value="Maltese">Maltese </option>
+                  <option value="Mauritian Créole">Mauritian Créole </option>
                   <option value="Mongolian">Mongolian </option>
                   <option value="Nepali">Nepali </option>
                   <option value="Norwegian">Norwegian </option>
+                  <option value="Pashto">Pashto </option>
                   <option value="Persian">Persian </option>
                   <option value="Polish">Polish </option>
                   <option value="Portuguese">Portuguese </option>
@@ -471,12 +487,14 @@
                   <option value="Swedish">Swedish </option>
                   <option value="Tamil">Tamil </option>
                   <option value="Thai">Thai </option>
+                  <option value="Tigrigna">Tigrigna </option>
                   <option value="Turkish">Turkish </option>
                   <option value="Ukrainian">Ukrainian </option>
                   <option value="Urdu">Urdu </option>
                   <option value="Uzbek">Uzbek </option>
                   <option value="Vietnamese">Vietnamese </option>
                   <option value="Welsh">Welsh </option>
+                  <option value="Xhosa">Xhosa </option>
                   <option value="Yiddish">Yiddish </option>
                 </select>
               </li>
@@ -632,9 +650,12 @@
                   <option value="2014">2014</option>
                   <option value="2015">2015</option>
                   <option value="2016">2016</option>
+                  <option value="2017">2017</option>
+                  <option value="2018">2018</option>
+                  <option value="2019">2019</option>
+                  <option value="2020">2020</option>
                 </select>
               </li>
-              <b>*Required</b>
             </ul>
             <hr>
             <div class="centered">
