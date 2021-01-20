@@ -123,7 +123,7 @@
 
 <body>
   <header>
-    <h1>THE UNIVERSITY OF IOWA INTERNATIONAL WRITING PROGRAM: 1966-PRESENT</h1><br>
+    <h1>THE UNIVERSITY OF IOWA INTERNATIONAL WRITING PROGRAM: 1967-PRESENT</h1><br>
     <!--Map by <a target='blank' href='https://jebowe3.github.io/Map-Portfolio/'>Jay Bowen</a>, 2020 | Background image by <a target='blank' href='https://commons.wikimedia.org/w/index.php?curid=45194837'>Stewart Butterfield</a> - flickr, CC BY
       2.0-->
   </header>
@@ -167,7 +167,7 @@
       style: {
         color: '#777',
         opacity: 1,
-        fillColor: '#ccf',
+        fillColor: '#A2E2E8',
         fillOpacity: 1,
         weight: 2
       }
@@ -213,14 +213,12 @@
 
     // Add a function to style the counties by their writer counts
     function getColor(d) {
-      return d >= Math.round(ss.min(choroplethStops[6])) ? '#0f3034' :
-        d >= Math.round(ss.min(choroplethStops[5])) ? '#1C3F44' :
-        d >= Math.round(ss.min(choroplethStops[4])) ? '#30555A' :
-        d >= Math.round(ss.min(choroplethStops[3])) ? '#466A6F' :
-        d >= Math.round(ss.min(choroplethStops[2])) ? '#668488' :
-        d >= Math.round(ss.min(choroplethStops[1])) ? '#8BA0A2' :
-        d > 0 ? '#C4CED0' : // Make base greater than zero
-        '#1C00ff00';
+      return d >= Math.round(ss.min(choroplethStops[4])) ? '#993404' :
+        d >= Math.round(ss.min(choroplethStops[3])) ? '#d95f0e' :
+        d >= Math.round(ss.min(choroplethStops[2])) ? '#fe9929' :
+        d >= Math.round(ss.min(choroplethStops[1])) ? '#fed98e' :
+        d > 0 ? '#ffffd4' : // Make base greater than zero
+        '#FFFFF0';
     }
 
     // load the data asynchronously
@@ -236,7 +234,7 @@
       // Group most recent participant totals into 7 ckmeans categories using the simple-statistics JavaScript library
       choroplethStops.push(...ss.ckmeans(countries.features.map(function(feature) {
         return feature.properties['Participant_List_' + maxYear + '_subtotal']; // Run ckmeans on the most recent Participant_List property
-      }), 7)); // group into 7 ckmeans intervals
+      }), 5)); // group into 5 ckmeans intervals
 
       var earth = L.geoJson(land, {
         style: function(feature) {
@@ -245,7 +243,7 @@
             color: 'grey',
             strokeOpacity: 1,
             weight: 1,
-            fillColor: '#fdf5e6',
+            fillColor: '#FFFFF0',
             fillOpacity: 1
           }
         }
@@ -273,7 +271,7 @@
       nationLegend.onAdd = function(map) {
 
         var div = L.DomUtil.create('div', 'info legend'),
-          grades = [ss.min(choroplethStops[0]), ss.min(choroplethStops[1]), ss.min(choroplethStops[2]), ss.min(choroplethStops[3]), ss.min(choroplethStops[4]), ss.min(choroplethStops[5]), ss.min(choroplethStops[6])],
+          grades = [ss.min(choroplethStops[0]), ss.min(choroplethStops[1]), ss.min(choroplethStops[2]), ss.min(choroplethStops[3]), ss.min(choroplethStops[4])],
           labels = ["<h5 style='font-weight:bold'>Total Participants</h5>"];
 
         // loop through the intervals and generate a label with a colored square for each interval

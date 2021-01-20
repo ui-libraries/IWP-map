@@ -154,8 +154,8 @@
             <input id="timeline_display" name="timeline_display" type="hidden" value="none" ;="" <hr="">
             <ul class="no_marker">
               <a href="https://iwp.uiowa.edu/" target="_blank"><img class='logo-resize' src='images/iwp-logo.png'/></a>
-              <h1>THE UNIVERSITY OF IOWA INTERNATIONAL WRITING PROGRAM: 1966-PRESENT</h1>
-              <p>Search the database of nearly 1,400 IWP participants since 1966 by any combination of categories</p>
+              <h1>THE UNIVERSITY OF IOWA INTERNATIONAL WRITING PROGRAM: 1967-PRESENT</h1>
+              <p>Search the database of over 1,500 IWP participants since 1967 by any combination of categories</p>
               <li class="menu_item"><strong>Country:</strong>
                 <select id="country">
                   <option value="0" selected="selected">[any]</option>
@@ -409,13 +409,13 @@
                 </select><br>
                 <!-- Hide the following, if you are not allowing the user to switch between annual and cumulative results,
                 but rather only allowing for annual results. Otherwise, delete this and comment in the two radio inputs that follow.-->
-                <input type="hidden" name="count_type" value="annual" class="in1" checked="checked">
-                <!--
+                <!--<input type="hidden" name="count_type" value="annual" class="in1" checked="checked">-->
+
                 <input type="radio" name="count_type" value="annual" class="in1" checked="checked">
                 This year only&nbsp;&nbsp;&nbsp;
                 <input type="radio" name="count_type" value="cumulative" class="in1" checked="checked">
                 Cumulative<br>
-                -->
+
               </li>
               <li class="menu_item"><strong>Author Languages:</strong>
                 <input type="radio" name="multilingual" value="1" class="in1" checked="checked">
@@ -726,7 +726,7 @@
       style: {
         color: '#777',
         opacity: 1,
-        fillColor: '#ccf',
+        fillColor: '#A2E2E8',
         fillOpacity: 1,
         weight: 2
       }
@@ -782,7 +782,7 @@
             color: 'grey',
             strokeOpacity: 1,
             weight: 1,
-            fillColor: '#fdf5e6',
+            fillColor: '#A8B59F',
             fillOpacity: 1
           }
         }
@@ -857,8 +857,8 @@
         pointToLayer: function(feature, ll) {
 
           return L.circleMarker(ll, {
-            color: '#FF8C00',
-            fillColor: '#FF8C00',
+            color: '#873620',
+            fillColor: '#873620',
             opacity: 1,
             weight: 1,
             fillOpacity: 0.25
@@ -886,7 +886,7 @@
           // return to the original style on mouseout
           layer.on("mouseout", function(e) {
             layer.setStyle({
-              fillColor: '#FF8C00',
+              fillColor: '#873620',
             });
           });
 
