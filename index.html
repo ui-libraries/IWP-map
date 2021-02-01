@@ -111,7 +111,7 @@
       cursor:pointer;
     }
 
-    #formsubmit, #timeline-anm, #timeline-button {
+    #formsubmit, #formreset, #timeline-anm, #timeline-button {
       background-color: #008CBA;
       color: white;
       padding: 4px 8px;
@@ -660,6 +660,7 @@
             <hr>
             <div class="centered">
               <button id="formsubmit" type="submit" value="apply">Apply Query</button>
+              <button id="formreset" type="submit" value="reset" onclick="resetForm()">Reset Form</button>
               <!--
               &nbsp;&nbsp;&nbsp;
               <form action="http://iwp.lib.uiowa.edu/index.php/iwpmap" method="post" accept-charset="utf-8" class="inlineForm">
@@ -755,10 +756,28 @@
         '0.0';
     }
 
+    // define the selected year
     var currentYear = document.getElementById("residency").value;
 
     // define the input form
     var filters = document.getElementById('map_parameters');
+
+    // define the form submit button
+    var formSubmit = document.getElementById('formsubmit');
+
+    // on page load...
+    window.onload = function() {
+      // click the form submit button
+      formSubmit.click();
+    };
+
+    // define a function to reset the form upon clicking the "Reset Form" button
+    function resetForm() {
+      // reset all input filters
+      filters.reset();
+      // click the form submit button
+      formSubmit.click();
+    };
 
     // define an empty array to hold the geojson properties
     var geojsonProperties = [];
