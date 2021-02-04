@@ -280,6 +280,9 @@
             fillColor: getColor(feature.properties['Participant_List_' + currentYear + '_subtotal']),
             fillOpacity: getOpacity(feature.properties['Year_' + currentYear])
           }
+        },
+        onEachFeature: function(feature, layer) {
+          layer.bindPopup("<b>" + layer.feature.properties.REAL_NAME + "</b><br>Total Participants: " + layer.feature.properties['Participant_List_' + currentYear + '_subtotal']);
         }
       }).addTo(map); // keeps nations layer from being placed over circle markers upon map load
 
@@ -541,6 +544,7 @@
         layer.setStyle({
           fillColor: getColor(layer.feature.properties['Participant_List_' + currentYear + '_subtotal'])
         });
+        layer.bindPopup("<b>" + layer.feature.properties.REAL_NAME + "</b><br>Total Participants: " + layer.feature.properties['Participant_List_' + currentYear + '_subtotal']);
       });
 
     } // End updateLayers function
