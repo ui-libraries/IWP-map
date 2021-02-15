@@ -2,6 +2,9 @@
 <html>
 
 <head>
+  <link rel="icon"
+      type="image/png"
+      href="images/iwp-logo.png">
   <meta charset="utf-8">
   <title>IWP Map</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@0.6.2/dist/leaflet.css" />
@@ -367,10 +370,21 @@
 
           // define properties
           var props = layer.feature.properties;
+          // define the current popupContent (counts only unique writers)
+          var popupContent = props.popup_cumulative;
+          // count all writers in the list (including writers who returned for more that one year)
+          var writerCount = popupContent.split("</a>").length - 1;
+          // get the string between ";(" and ")</b>"
+          var rx = new RegExp(";([\\d\\D]*?)</b>", "g");
+          // replace this section with the new writer count
+          var newPopupContent = popupContent.replace(rx, ";(" + writerCount + ")</b>");
+
           // define circle radius with a formula
-          var radius = calcRadius(Number(props.writer_total_cumulative));
+          //var radius = calcRadius(Number(props.writer_total_cumulative));
+          var radius = calcRadius(Number(writerCount));
           // bind a popup with the cumulative popup content
-          layer.bindPopup(props.popup_cumulative, {
+          //layer.bindPopup(props.popup_cumulative, {
+          layer.bindPopup(newPopupContent, {
             maxHeight: 300,
             maxWidth: 350
           });
