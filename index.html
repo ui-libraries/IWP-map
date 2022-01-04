@@ -153,7 +153,7 @@
             <!--<form id="map_parameters" name="map_parameters" action="http://iwp.lib.uiowa.edu/index.php/iwpmap" method="post" accept-charset="utf-8" class="inlineForm">-->
             <!-- 	hidden input fields will be modified by the time slider -->
             <input id="timeline_start" name="timeline_start" type="hidden" value="1966">
-            <input id="timeline_end" name="timeline_end" type="hidden" value="2020">
+            <input id="timeline_end" name="timeline_end" type="hidden" value="2021">
             <input id="timeline_display" name="timeline_display" type="hidden" value="none" ;="" <hr="">
             <ul class="no_marker">
               <a href="https://iwp.uiowa.edu/" target="_blank"><img class='logo-resize' src='images/iwp-logo.png'/></a>
@@ -409,8 +409,9 @@
                   <option value="2016">2016</option>
                   <option value="2017">2017</option>
                   <option value="2018">2018</option>
-                  <option value="2019" selected="selected">2019</option>
+                  <option value="2019">2019</option>
                   <option value="2020">2020</option>
+                  <option value="2021" selected="selected">2021</option>
                 </select><br>
                 <!-- Hide the following, if you are not allowing the user to switch between annual and cumulative results,
                 but rather only allowing for annual results. Otherwise, delete this and comment in the two radio inputs that follow.-->
@@ -435,6 +436,7 @@
                   <option value="Albanian">Albanian </option>
                   <option value="Arabic">Arabic </option>
                   <option value="Armenian">Armenian </option>
+                  <option value="Azerbaijani">Azerbaijani </option>
                   <option value="Basque">Basque </option>
                   <option value="Belarusian">Belarusian </option>
                   <option value="Bengali">Bengali </option>
@@ -475,6 +477,7 @@
                   <option value="Maltese">Maltese </option>
                   <option value="Mauritian Créole">Mauritian Créole </option>
                   <option value="Mongolian">Mongolian </option>
+                  <option value="Nahuatl">Nahuatl </option>
                   <option value="Nepali">Nepali </option>
                   <option value="Norwegian">Norwegian </option>
                   <option value="Pashto">Pashto </option>
@@ -659,6 +662,7 @@
                   <option value="2018">2018</option>
                   <option value="2019">2019</option>
                   <option value="2020">2020</option>
+                  <option value="2021">2021</option>
                 </select>
               </li>
             </ul>
@@ -789,10 +793,13 @@
 
     var output = [];
 
+    // Create a feature group to store polygons
+    var filteredCountries = L.featureGroup().addTo(map);
+
     // load the data asynchronously
     d3.queue()
       .defer(d3.json, 'data/Land_WGS84.geojson') // the continents, land masses
-      .defer(d3.json, 'data/Nations_Writers.json') // the historical countries layer
+      .defer(d3.json, 'data/Nations_Writers_new.geojson') // the historical countries layer
       .defer(d3.csv, 'data/IWP_for_json.csv') // the centroids layer
       .await(drawMap); // load the layers after the map loads
 
@@ -817,14 +824,12 @@
           return {
             stroke: 1,
             color: 'grey',
-            strokeOpacity: getOpacity(feature.properties['Year_' + currentYear]),
-            weight: getWeight(feature.properties['Year_' + currentYear]),
+            weight: 1,
             fillColor: '#1C00ff00',
-            //fillColor: getColor(feature.properties['Participant_List_' + currentYear + '_subtotal']),
-            fillOpacity: getOpacity(feature.properties['Year_' + currentYear])
+            fillOpacity: 1,
           }
         }
-      }).addTo(map); // keeps nations layer from being placed over circle markers upon map load
+      }); // end nations layer
 
       // call the drawCircles function
       drawCircles(cumulative, nations);
@@ -961,7 +966,13 @@
 
         // use the eachLayer method to access all objects of the nations layer
         nations.eachLayer(function(layer) {
-
+          // filter features
+          if (layer.feature.properties.Start_Year <= updateYear && updateYear <= layer.feature.properties.End_Year) {
+            filteredCountries.addLayer(layer);
+          } else {
+            filteredCountries.removeLayer(layer);
+          }
+/*
           // dynamically set styles for all nations based on properties linked to
           // the designated year using the the following "get" functions
           layer.setStyle({
@@ -973,6 +984,7 @@
           layer.setStyle({
             fillOpacity: getOpacity(layer.feature.properties['Year_' + updateYear])
           });
+*/
         }); // end nations.eachLayer
 
         // call updatePoints function
@@ -8812,6 +8824,7 @@
 
       });
       cumulativePart.addTo(map);
+      cumulativePart.bringToFront(); // keep it from falling behind the countries layer
     };
   </script>
 </html>

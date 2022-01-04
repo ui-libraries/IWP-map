@@ -155,7 +155,7 @@
     <div id="map"></div>
     <!-- ui slider -->
     <div id='slider' class='range w300 round py6 border--gray-light px12 leaflet-control'>
-      <input type='range' min="1966" max="2020" value="1966" step="1" class="slider" />
+      <input type='range' min="1966" max="2021" value="1966" step="1" class="slider" />
     </div>
     <!-- end slider -->
     <!-- temporal legend -->
@@ -217,18 +217,6 @@
       maxYear = tags[i].max;
     };
 
-    // Define a getOpacity function
-    function getOpacity(d) {
-      return d > 0 ? '1.0' :
-        '0.0';
-    }
-
-    // Define a getWeight function
-    function getWeight(d) {
-      return d > 0 ? '0.5' :
-        '0.0';
-    }
-
     // Set the currentYear to whatever value is in the slider on load
     var currentYear = $('.slider').val();
 
@@ -245,10 +233,24 @@
         '#FFFFF0';
     }
 
+    // Create a feature group to store polygons
+    var filteredCountries = L.featureGroup().addTo(map);
+    // Create a feature group to store circles
+    var filteredCircles = L.featureGroup();
+
+    var overlays = {
+      "Participant Data": filteredCircles,
+    };
+
+    // all done with the layers, add them to layer control
+    L.control.layers(null, overlays, {
+      collapsed: false,
+    }).addTo(map);
+
     // load the data asynchronously
     d3.queue()
       .defer(d3.json, 'data/Land_WGS84.geojson') // the continents, land masses
-      .defer(d3.json, 'data/Nations_Writers.json') // the historical countries layer
+      .defer(d3.json, 'data/Nations_Writers_new.geojson') // the historical countries layer
       .defer(d3.csv, 'data/IWP_for_json.csv') // the centroids layer
       .await(drawMap); // load the layers after the map loads
 
@@ -257,7 +259,7 @@
 
       // Group most recent participant totals into 7 ckmeans categories using the simple-statistics JavaScript library
       choroplethStops.push(...ss.ckmeans(countries.features.map(function(feature) {
-        return feature.properties['Participant_List_' + maxYear + '_subtotal']; // Run ckmeans on the most recent Participant_List property
+        return feature.properties['List_' + maxYear + '_subtotal']; // Run ckmeans on the most recent Participant_List property
       }), 5)); // group into 5 ckmeans intervals
 
       var earth = L.geoJson(land, {
@@ -278,16 +280,21 @@
           return {
             stroke: 1,
             color: 'grey',
-            strokeOpacity: getOpacity(feature.properties['Year_' + currentYear]),
-            weight: getWeight(feature.properties['Year_' + currentYear]),
-            fillColor: getColor(feature.properties['Participant_List_' + currentYear + '_subtotal']),
-            fillOpacity: getOpacity(feature.properties['Year_' + currentYear])
+            weight: 1,
+            fillColor: getColor(feature.properties['List_' + currentYear + '_subtotal']),
+            fillOpacity: 1,
           }
         },
         onEachFeature: function(feature, layer) {
-          layer.bindPopup("<b>" + layer.feature.properties.REAL_NAME + "</b><br>Total Participants: " + layer.feature.properties['Participant_List_' + currentYear + '_subtotal']);
+          layer.bindPopup("<b>" + layer.feature.properties.REAL_NAME + "</b><br>Total Participants: " + layer.feature.properties['List_' + currentYear + '_subtotal']);
+          // filter features
+          if (layer.feature.properties.Start_Year <= currentYear && currentYear <= layer.feature.properties.End_Year) {
+            filteredCountries.addLayer(layer);
+          } else {
+            filteredCountries.removeLayer(layer);
+          }
         }
-      }).addTo(map); // keeps nations layer from being placed over circle markers upon map load
+      }); // keeps nations layer from being placed over circle markers upon map load
 
       // Define a legend for choropleth nations
       var nationLegend = L.control({
@@ -406,20 +413,10 @@
           if (currentYear >= props.min_year && currentYear <= props.max_year) {
             // set the radius using the variable above
             layer.setRadius(radius);
-            layer.setStyle({
-              opacity: 1,
-              weight: 1,
-              fillOpacity: 0.25
-            });
+            filteredCircles.addLayer(layer);
             // otherwise...
           } else {
-            // set the radius to zero
-            layer.setRadius(0);
-            layer.setStyle({
-              opacity: 0,
-              weight: 0,
-              fillOpacity: 0
-            });
+            filteredCircles.removeLayer(layer);
           };
 
         }
@@ -428,16 +425,6 @@
 
       sequenceUI(cumulativePart, nations);
       createTemporalLegend(currentYear); // produces temporal legend upon map loading
-      resizeCircles(cumulativePart, currentYear);
-
-      var overlays = {
-        "Participant Data": cumulativePart,
-      };
-
-      // all done with the layers, add them to layer control
-      L.control.layers(null, overlays, {
-        collapsed: false,
-      }).addTo(map);
 
     }; // end drawCircles() function
 
@@ -471,8 +458,9 @@
         .on('input change', function() {
           var currentYear = $(this).val(); // identifies the year selected
           createTemporalLegend(currentYear);
-          resizeCircles(cumulativePart, currentYear);
           updateLayers(nations, currentYear);
+          resizeCircles(cumulativePart, currentYear);
+          filteredCircles.bringToFront();
         });
 
     }; // End sequenceUI function
@@ -504,7 +492,7 @@
 
     }; // end createTemporalLegend function
 
-    // resize our default circles based on cumulative incidents of election interference
+    // resize our default circles based on cumulative totals
     function resizeCircles(cumulativePart, currentYear) {
 
       cumulativePart.eachLayer(function(layer) {
@@ -519,20 +507,10 @@
         if (currentYear >= props.min_year && currentYear <= props.max_year) {
           // set the radius using the variable above
           layer.setRadius(radius);
-          layer.setStyle({
-            opacity: 1,
-            weight: 1,
-            fillOpacity: 0.25
-          });
+          filteredCircles.addLayer(layer);
           // otherwise...
         } else {
-          // set the radius to zero
-          layer.setRadius(0);
-          layer.setStyle({
-            opacity: 0,
-            weight: 0,
-            fillOpacity: 0
-          });
+          filteredCircles.removeLayer(layer);
         };
       });
 
@@ -543,22 +521,18 @@
 
       // use the eachLayer method to access all objects of the nations layer
       nations.eachLayer(function(layer) {
-
         // dynamically set styles for all nations based on properties linked to
-        // the slider designated year using the the following "get" functions
+        // the slider designated year using the the following "get" function
         layer.setStyle({
-          strokeOpacity: getOpacity(layer.feature.properties['Year_' + currentYear])
+          fillColor: getColor(layer.feature.properties['List_' + currentYear + '_subtotal'])
         });
-        layer.setStyle({
-          weight: getWeight(layer.feature.properties['Year_' + currentYear])
-        });
-        layer.setStyle({
-          fillOpacity: getOpacity(layer.feature.properties['Year_' + currentYear])
-        });
-        layer.setStyle({
-          fillColor: getColor(layer.feature.properties['Participant_List_' + currentYear + '_subtotal'])
-        });
-        layer.bindPopup("<b>" + layer.feature.properties.REAL_NAME + "</b><br>Total Participants: " + layer.feature.properties['Participant_List_' + currentYear + '_subtotal']);
+        layer.bindPopup("<b>" + layer.feature.properties.REAL_NAME + "</b><br>Total Participants: " + layer.feature.properties['List_' + currentYear + '_subtotal']);
+        // filter features
+        if (layer.feature.properties.Start_Year <= currentYear && currentYear <= layer.feature.properties.End_Year) {
+          filteredCountries.addLayer(layer);
+        } else {
+          filteredCountries.removeLayer(layer);
+        }
       });
 
     } // End updateLayers function
