@@ -4149,27 +4149,15 @@
         };
       };
 
-      console.log(output);
-
       // for each layer in cumulativePart...
       cumulativePart.eachLayer(function(layer) {
 
         // define properties
         var props = layer.feature.properties;
 
-        //console.log("update: " + updateYear);
-        //console.log("range: " + props.min_year + "-" + props.max_year);
-
-        var rawPopup = props.popup_year.split("<hr />")[1];
-
-        if (props.min_year <= updateYear) {
-          //console.log("<b>" + props.country + "&nbsp;(" + props.writer_total_cumulative + ")</b><hr />" + rawPopup);
-        } else {
-          //console.log("no");
-        }
-
+        /* NO LONGER NEEDED */
         // define the current cumulative popup content (counts only unique writers)
-        var cumulativePopup = props.popup_cumulative;
+        //var cumulativePopup = props.popup_cumulative;
         // count all writers in this list (including writers who returned for more that one year)
         //var writerCount = cumulativePopup.split("</a>").length - 1;
         // get the string between ";(" and ")</b>"
@@ -4177,10 +4165,11 @@
         // replace this section with the new writer count
         //var newCumulativePopup = cumulativePopup.replace(rx, ";(" + writerCount + ")</b>");
 
-
         // define circle radius with a formula based on...
         //var radius = calcRadius(Number(props.writer_total_cumulative)); // cumulative writer totals
         //var radius = calcRadius(Number(writerCount)); // cumulative writer totals
+        /* END NO LONGER NEEDED */
+
         var annualRadius = calcRadius(Number(props.writer_total_year)); // annual writer totals
         var annualMultiRadius = calcRadius(Number(props.multilingual_writer_total_year)); // annual multilingual writer totals;
         //var cumulativeMultiRadius = calcRadius(Number(props.multilingual_writer_total_cumulative)); // cumulative multilingual writer totals;
