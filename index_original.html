@@ -1025,92 +1025,6 @@
 
       // if "cumulative" is selected...
       if (countValue == "cumulative") {
-
-        /* TESTING!!! */
-        // if a langValue is 1+
-        if (langValue == 1) {
-          // clear the popup content in the output array
-          for (x = 0; x < output.length; x++) {
-            output[x].writerPop.length = 0;
-          };
-          // clear the output array
-          output.length = 0;
-          // iterate through the geojson properties array to compile cumulative lists of writers for the selection
-          cumulativeMultilingualProps.forEach(function(item) {
-            // if the min_year property is less than or equal to the updateYear variable
-            if (updateYear >= item.min_year) {
-              // collect by country name
-              var existing = output.filter(function(v, i) {
-                return v.country == item.country;
-              });
-              // gather and define all the popup content
-              if (item.writer_1_languages > 0) {
-                var popup1 = item.writer_1_popup;
-              };
-              if (item.writer_2_languages > 0) {
-                var popup2 = item.writer_2_popup;
-              };
-              if (item.writer_3_languages > 0) {
-                var popup3 = item.writer_3_popup;
-              };
-              if (item.writer_4_languages > 0) {
-                var popup4 = item.writer_4_popup;
-              };
-              if (item.writer_5_languages > 0) {
-                var popup5 = item.writer_5_popup;
-              };
-              // concatenate all cumulative writers for the selection in one property
-              if (existing.length) {
-                var existingIndex = output.indexOf(existing[0]);
-                output[existingIndex].writerPop = (output[existingIndex].writerPop.concat(popup1).concat(popup2).concat(popup3).concat(popup4).concat(popup5)).filter(Boolean);
-              } else {
-                if (typeof item.writer_1_popup == 'string' && typeof item.writer_2_popup == 'string' && typeof item.writer_3_popup == 'string' && typeof item.writer_4_popup == 'string' && typeof item.writer_5_popup == 'string')
-                  item.writerPop = [item.writerPop];
-                item.writer_1_popup = [item.writer_1_popup];
-                item.writer_2_popup = [item.writer_2_popup];
-                item.writer_3_popup = [item.writer_3_popup];
-                item.writer_4_popup = [item.writer_4_popup];
-                item.writer_5_popup = [item.writer_5_popup];
-                // push to output array
-                output.push(item)
-              }
-            };
-          });
-          // ADD FIRST YEAR CONTENT
-          // loop through the output
-          for (x = 0; x < output.length; x++) {
-            // for the first year, if the writer's language equals the selection, add the writer's popup content to the front of the writerPop property
-            if (output[x].writer_1_languages > 0) {
-              var extraPopup1 = output[x].writer_1_popup;
-            } else {
-              var extraPopup1 = [""];
-            };
-            if (output[x].writer_2_languages > 0) {
-              var extraPopup2 = output[x].writer_2_popup;
-            } else {
-              var extraPopup2 = [""];
-            };
-            if (output[x].writer_3_languages > 0) {
-              var extraPopup3 = output[x].writer_3_popup;
-            } else {
-              var extraPopup3 = [""];
-            };
-            if (output[x].writer_4_languages > 0) {
-              var extraPopup4 = output[x].writer_4_popup;
-            } else {
-              var extraPopup4 = [""];
-            };
-            if (output[x].writer_5_languages > 0) {
-              var extraPopup5 = output[x].writer_5_popup;
-            } else {
-              var extraPopup5 = [""];
-            };
-            // redefine the writerPop property as follows...
-            output[x].writerPop = (extraPopup1.concat(extraPopup2).concat(extraPopup3).concat(extraPopup4).concat(extraPopup5)).filter(Boolean).concat(output[x].writerPop);
-          };
-        };
-        /* END TESTING!!! */
-
         // if "2+" is selected...
         if (langValue == 2) {
           // clear the popup content in the output array
@@ -1127,7 +1041,6 @@
               var existing = output.filter(function(v, i) {
                 return v.country == item.country;
               });
-
               // check if writers in the list are monolingual or absent and, if so, set the property equal to ""
               if (item.writer_1_languages > 1) {
                 var popup1 = item.writer_1_popup;
@@ -1144,7 +1057,6 @@
               if (item.writer_5_languages > 1) {
                 var popup5 = item.writer_5_popup;
               };
-
               // concatenate all cumulative multilingual writers in one property
               if (existing.length) {
                 var existingIndex = output.indexOf(existing[0]);
@@ -4149,38 +4061,25 @@
         };
       };
 
-      console.log(output);
-
       // for each layer in cumulativePart...
       cumulativePart.eachLayer(function(layer) {
 
         // define properties
         var props = layer.feature.properties;
 
-        //console.log("update: " + updateYear);
-        //console.log("range: " + props.min_year + "-" + props.max_year);
-
-        var rawPopup = props.popup_year.split("<hr />")[1];
-
-        if (props.min_year <= updateYear) {
-          //console.log("<b>" + props.country + "&nbsp;(" + props.writer_total_cumulative + ")</b><hr />" + rawPopup);
-        } else {
-          //console.log("no");
-        }
-
         // define the current cumulative popup content (counts only unique writers)
         var cumulativePopup = props.popup_cumulative;
         // count all writers in this list (including writers who returned for more that one year)
-        //var writerCount = cumulativePopup.split("</a>").length - 1;
+        var writerCount = cumulativePopup.split("</a>").length - 1;
         // get the string between ";(" and ")</b>"
-        //var rx = new RegExp(";([\\d\\D]*?)</b>", "g");
+        var rx = new RegExp(";([\\d\\D]*?)</b>", "g");
         // replace this section with the new writer count
-        //var newCumulativePopup = cumulativePopup.replace(rx, ";(" + writerCount + ")</b>");
+        var newCumulativePopup = cumulativePopup.replace(rx, ";(" + writerCount + ")</b>");
 
 
         // define circle radius with a formula based on...
         //var radius = calcRadius(Number(props.writer_total_cumulative)); // cumulative writer totals
-        //var radius = calcRadius(Number(writerCount)); // cumulative writer totals
+        var radius = calcRadius(Number(writerCount)); // cumulative writer totals
         var annualRadius = calcRadius(Number(props.writer_total_year)); // annual writer totals
         var annualMultiRadius = calcRadius(Number(props.multilingual_writer_total_year)); // annual multilingual writer totals;
         //var cumulativeMultiRadius = calcRadius(Number(props.multilingual_writer_total_cumulative)); // cumulative multilingual writer totals;
@@ -4190,21 +4089,6 @@
           var dataYear = updateYear >= props.min_year && updateYear <= props.max_year;
           // bind the cumulative popup
           //layer.bindPopup(props.popup_cumulative, {
-
-          /* TESTING */
-          // iterate through the output array
-          for (x = 0; x < output.length; x++) {
-            // if the layer country property equals the output country property...
-            if (props.country === output[x].country) {
-              // count all writers (including writers who returned for more that one year)
-              var writerCount = output[x].writerPop.join("").split("</a>").length - 1;
-              var radius = calcRadius(Number(writerCount)); // feed it the cumulative writer totals
-              // set the newCumulativePopup property to the following
-              var newCumulativePopup = "<b>" + props.country + "&nbsp;(" + writerCount + ")</b><hr />" + output[x].writerPop.join("");
-            };
-          };
-          /* END OF TESTING */
-
           layer.bindPopup(newCumulativePopup, {
             maxHeight: 300,
             maxWidth: 350
@@ -4271,25 +4155,26 @@
 //CUMULATIVE MULTILINGUAL
         // if "cumulative" is selected
         if (countValue == "cumulative") {
+
           // if "2+" is selected
           if (langValue == 2) {
-            // iterate through the output array
-            for (x = 0; x < output.length; x++) {
-              // if the layer country property equals the output country property...
-              if (props.country === output[x].country) {
-                // count all multilingual writers (including writers who returned for more that one year)
-                var cumulativeMultiCount = output[x].writerPop.join("").split("</a>").length - 1;
-                var cumulativeMultiRadius = calcRadius(Number(cumulativeMultiCount)); // feed it the cumulative multilingual writer totals
-                // set the cumulativeMultiPopup property to the following
-                //var cumulativeMultiPopup = "<b>" + props.country + "&nbsp;(" + props.multilingual_writer_total_cumulative + ")</b><hr />" + output[x].writerPop.join("");
-                var cumulativeMultiPopup = "<b>" + props.country + "&nbsp;(" + cumulativeMultiCount + ")</b><hr />" + output[x].writerPop.join("");
-              };
+          // iterate through the output array
+          for (x = 0; x < output.length; x++) {
+            // if the layer country property equals the output country property...
+            if (props.country === output[x].country) {
+              // count all multilingual writers (including writers who returned for more that one year)
+              var cumulativeMultiCount = output[x].writerPop.join("").split("</a>").length - 1;
+              var cumulativeMultiRadius = calcRadius(Number(cumulativeMultiCount)); // feed it the cumulative multilingual writer totals
+              // set the cumulativeMultiPopup property to the following
+              //var cumulativeMultiPopup = "<b>" + props.country + "&nbsp;(" + props.multilingual_writer_total_cumulative + ")</b><hr />" + output[x].writerPop.join("");
+              var cumulativeMultiPopup = "<b>" + props.country + "&nbsp;(" + cumulativeMultiCount + ")</b><hr />" + output[x].writerPop.join("");
             };
-            // bind the cumulative multilingual popup
-            layer.bindPopup(cumulativeMultiPopup, {
-              maxHeight: 300,
-              maxWidth: 350
-            });
+          };
+          // bind the cumulative multilingual popup
+          layer.bindPopup(cumulativeMultiPopup, {
+            maxHeight: 300,
+            maxWidth: 350
+          });
           };
 
           // if a language is selected
