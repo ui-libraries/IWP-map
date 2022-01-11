@@ -247,6 +247,8 @@
       collapsed: false,
     }).addTo(map);
 
+    var output = [];
+
     // load the data asynchronously
     d3.queue()
       .defer(d3.json, 'data/Land_WGS84.geojson') // the continents, land masses
@@ -377,24 +379,46 @@
 
           // define properties
           var props = layer.feature.properties;
-          // define the current popupContent (counts only unique writers)
-          var popupContent = props.popup_cumulative;
-          // count all writers in the list (including writers who returned for more that one year)
-          var writerCount = popupContent.split("</a>").length - 1;
-          // get the string between ";(" and ")</b>"
-          var rx = new RegExp(";([\\d\\D]*?)</b>", "g");
-          // replace this section with the new writer count
-          var newPopupContent = popupContent.replace(rx, ";(" + writerCount + ")</b>");
 
-          // define circle radius with a formula
-          //var radius = calcRadius(Number(props.writer_total_cumulative));
-          var radius = calcRadius(Number(writerCount));
-          // bind a popup with the cumulative popup content
-          //layer.bindPopup(props.popup_cumulative, {
-          layer.bindPopup(newPopupContent, {
-            maxHeight: 300,
-            maxWidth: 350
-          });
+          // if the min_year property is less than or equal to the currentYear variable
+          if (currentYear >= props.min_year) {
+            // collect by country name
+            var existing = output.filter(function(v, i) {
+              return v.country == props.country;
+            });
+            // gather and define all the popup content
+            if (props.writer_1_languages > 0) {
+              var popup1 = props.writer_1_popup;
+            };
+            if (props.writer_2_languages > 0) {
+              var popup2 = props.writer_2_popup;
+            };
+            if (props.writer_3_languages > 0) {
+              var popup3 = props.writer_3_popup;
+            };
+            if (props.writer_4_languages > 0) {
+              var popup4 = props.writer_4_popup;
+            };
+            if (props.writer_5_languages > 0) {
+              var popup5 = props.writer_5_popup;
+            };
+            // concatenate all cumulative writers for the selection in one property
+            if (existing.length) {
+              var existingIndex = output.indexOf(existing[0]);
+              output[existingIndex].writerPop = (output[existingIndex].writerPop.concat(popup1).concat(popup2).concat(popup3).concat(popup4).concat(popup5)).filter(Boolean);
+            } else {
+              if (typeof props.writer_1_popup == 'string' && typeof props.writer_2_popup == 'string' && typeof props.writer_3_popup == 'string' && typeof props.writer_4_popup == 'string' && typeof props.writer_5_popup == 'string')
+                props.writerPop = [props.writerPop];
+              props.writer_1_popup = [props.writer_1_popup];
+              props.writer_2_popup = [props.writer_2_popup];
+              props.writer_3_popup = [props.writer_3_popup];
+              props.writer_4_popup = [props.writer_4_popup];
+              props.writer_5_popup = [props.writer_5_popup];
+              // push to output array
+              output.push(props)
+            }
+          };
+
           // give the layer a subtle style on mouseover
           layer.on("mouseover", function(e) {
             layer.setStyle({
@@ -411,8 +435,23 @@
           // if the current year is greater than or equal to the min_year or
           // if it is less than or equal to the max_year...
           if (currentYear >= props.min_year && currentYear <= props.max_year) {
+            // iterate through the output array
+            for (x = 0; x < output.length; x++) {
+              // if the layer country property equals the output country property...
+              if (props.country === output[x].country) {
+                // count all writers (including writers who returned for more that one year)
+                var writerCount = output[x].writerPop.join("").split("</a>").length - 1;
+                var radius = calcRadius(Number(writerCount)); // feed it the cumulative writer totals
+                // set the newCumulativePopup property to the following
+                var newCumulativePopup = "<b>" + props.country + "&nbsp;(" + writerCount + ")</b><hr />" + output[x].writerPop.join("");
+              };
+            };
             // set the radius using the variable above
             layer.setRadius(radius);
+            layer.bindPopup(newCumulativePopup, {
+              maxHeight: 300,
+              maxWidth: 350
+            });
             filteredCircles.addLayer(layer);
             // otherwise...
           } else {
@@ -495,18 +534,77 @@
     // resize our default circles based on cumulative totals
     function resizeCircles(cumulativePart, currentYear) {
 
+      // clear the popup content in the output array
+      for (x = 0; x < output.length; x++) {
+        output[x].writerPop.length = 0;
+      };
+      // clear the output array
+      output.length = 0;
+
       cumulativePart.eachLayer(function(layer) {
 
         // define properties
         var props = layer.feature.properties;
-        // define circle radius with a formula
-        var radius = calcRadius(Number(props.writer_total_cumulative));
+
+        // if the min_year property is less than or equal to the currentYear variable
+        if (currentYear >= props.min_year) {
+          // collect by country name
+          var existing = output.filter(function(v, i) {
+            return v.country == props.country;
+          });
+          // gather and define all the popup content
+          if (props.writer_1_languages > 0) {
+            var popup1 = props.writer_1_popup;
+          };
+          if (props.writer_2_languages > 0) {
+            var popup2 = props.writer_2_popup;
+          };
+          if (props.writer_3_languages > 0) {
+            var popup3 = props.writer_3_popup;
+          };
+          if (props.writer_4_languages > 0) {
+            var popup4 = props.writer_4_popup;
+          };
+          if (props.writer_5_languages > 0) {
+            var popup5 = props.writer_5_popup;
+          };
+          // concatenate all cumulative writers for the selection in one property
+          if (existing.length) {
+            var existingIndex = output.indexOf(existing[0]);
+            output[existingIndex].writerPop = (output[existingIndex].writerPop.concat(popup1).concat(popup2).concat(popup3).concat(popup4).concat(popup5)).filter(Boolean);
+          } else {
+            if (typeof props.writer_1_popup == 'string' && typeof props.writer_2_popup == 'string' && typeof props.writer_3_popup == 'string' && typeof props.writer_4_popup == 'string' && typeof props.writer_5_popup == 'string')
+              props.writerPop = [props.writerPop];
+            props.writer_1_popup = [props.writer_1_popup];
+            props.writer_2_popup = [props.writer_2_popup];
+            props.writer_3_popup = [props.writer_3_popup];
+            props.writer_4_popup = [props.writer_4_popup];
+            props.writer_5_popup = [props.writer_5_popup];
+            // push to output array
+            output.push(props)
+          }
+        };
 
         // if the current year is greater than or equal to the min_year or
         // if it is less than or equal to the max_year...
         if (currentYear >= props.min_year && currentYear <= props.max_year) {
+          // iterate through the output array
+          for (x = 0; x < output.length; x++) {
+            // if the layer country property equals the output country property...
+            if (props.country === output[x].country) {
+              // count all writers (including writers who returned for more that one year)
+              var writerCount = output[x].writerPop.join("").split("</a>").length - 1;
+              var radius = calcRadius(Number(writerCount)); // feed it the cumulative writer totals
+              // set the newCumulativePopup property to the following
+              var newCumulativePopup = "<b>" + props.country + "&nbsp;(" + writerCount + ")</b><hr />" + output[x].writerPop.join("");
+            };
+          };
           // set the radius using the variable above
           layer.setRadius(radius);
+          layer.bindPopup(newCumulativePopup, {
+            maxHeight: 300,
+            maxWidth: 350
+          });
           filteredCircles.addLayer(layer);
           // otherwise...
         } else {
