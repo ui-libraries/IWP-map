@@ -233,6 +233,8 @@
         '#FFFFF0';
     }
 
+    var output = [];
+
     // Create a feature group to store polygons
     var filteredCountries = L.featureGroup().addTo(map);
     // Create a feature group to store circles
@@ -246,8 +248,6 @@
     L.control.layers(null, overlays, {
       collapsed: false,
     }).addTo(map);
-
-    var output = [];
 
     // load the data asynchronously
     d3.queue()
@@ -419,6 +419,39 @@
             }
           };
 
+          // ADD FIRST YEAR CONTENT
+          // loop through the output
+          for (x = 0; x < output.length; x++) {
+            // for the first year, if the writer's language equals the selection, add the writer's popup content to the front of the writerPop property
+            if (output[x].writer_1_languages > 0) {
+              var extraPopup1 = output[x].writer_1_popup;
+            } else {
+              var extraPopup1 = [""];
+            };
+            if (output[x].writer_2_languages > 0) {
+              var extraPopup2 = output[x].writer_2_popup;
+            } else {
+              var extraPopup2 = [""];
+            };
+            if (output[x].writer_3_languages > 0) {
+              var extraPopup3 = output[x].writer_3_popup;
+            } else {
+              var extraPopup3 = [""];
+            };
+            if (output[x].writer_4_languages > 0) {
+              var extraPopup4 = output[x].writer_4_popup;
+            } else {
+              var extraPopup4 = [""];
+            };
+            if (output[x].writer_5_languages > 0) {
+              var extraPopup5 = output[x].writer_5_popup;
+            } else {
+              var extraPopup5 = [""];
+            };
+            // redefine the writerPop property as follows...
+            output[x].writerPop = (extraPopup1.concat(extraPopup2).concat(extraPopup3).concat(extraPopup4).concat(extraPopup5)).filter(Boolean).concat(output[x].writerPop);
+          };
+
           // give the layer a subtle style on mouseover
           layer.on("mouseover", function(e) {
             layer.setStyle({
@@ -460,6 +493,12 @@
 
         }
 
+      });
+
+      // fire the resizeCircles function on page loading
+      // this keeps the first year content from duplicating in the popup
+      $(window).on('load', function(){
+        resizeCircles(cumulativePart, currentYear);
       });
 
       sequenceUI(cumulativePart, nations);
@@ -585,6 +624,44 @@
           }
         };
 
+      });
+
+      // ADD FIRST YEAR CONTENT
+      // loop through the output
+      for (x = 0; x < output.length; x++) {
+        // for the first year, if the writer's language equals the selection, add the writer's popup content to the front of the writerPop property
+        if (output[x].writer_1_languages > 0) {
+          var extraPopup1 = output[x].writer_1_popup;
+        } else {
+          var extraPopup1 = [""];
+        };
+        if (output[x].writer_2_languages > 0) {
+          var extraPopup2 = output[x].writer_2_popup;
+        } else {
+          var extraPopup2 = [""];
+        };
+        if (output[x].writer_3_languages > 0) {
+          var extraPopup3 = output[x].writer_3_popup;
+        } else {
+          var extraPopup3 = [""];
+        };
+        if (output[x].writer_4_languages > 0) {
+          var extraPopup4 = output[x].writer_4_popup;
+        } else {
+          var extraPopup4 = [""];
+        };
+        if (output[x].writer_5_languages > 0) {
+          var extraPopup5 = output[x].writer_5_popup;
+        } else {
+          var extraPopup5 = [""];
+        };
+        // redefine the writerPop property as follows...
+        output[x].writerPop = (extraPopup1.concat(extraPopup2).concat(extraPopup3).concat(extraPopup4).concat(extraPopup5)).filter(Boolean).concat(output[x].writerPop);
+      };
+
+      cumulativePart.eachLayer(function(layer) {
+        // define properties
+        var props = layer.feature.properties;
         // if the current year is greater than or equal to the min_year or
         // if it is less than or equal to the max_year...
         if (currentYear >= props.min_year && currentYear <= props.max_year) {
