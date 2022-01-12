@@ -798,8 +798,8 @@
 
     // load the data asynchronously
     d3.queue()
-      .defer(d3.json, 'data/Land_WGS84.geojson') // the continents, land masses
-      .defer(d3.json, 'data/Nations_Writers_new.geojson') // the historical countries layer
+      .defer(d3.json, 'data/Land_WGS84.json') // the continents, land masses
+      .defer(d3.json, 'data/Nations_Writers_new.json') // the historical countries layer
       .defer(d3.csv, 'data/IWP_for_json.csv') // the centroids layer
       .await(drawMap); // load the layers after the map loads
 
@@ -907,7 +907,7 @@
             maxHeight: 300,
             maxWidth: 350
           });
-*/          
+*/
           // give the layer a subtle style on mouseover
           layer.on("mouseover", function(e) {
             layer.setStyle({
