@@ -153,7 +153,7 @@
             <!--<form id="map_parameters" name="map_parameters" action="http://iwp.lib.uiowa.edu/index.php/iwpmap" method="post" accept-charset="utf-8" class="inlineForm">-->
             <!-- 	hidden input fields will be modified by the time slider -->
             <input id="timeline_start" name="timeline_start" type="hidden" value="1966">
-            <input id="timeline_end" name="timeline_end" type="hidden" value="2021">
+            <input id="timeline_end" name="timeline_end" type="hidden" value="2022">
             <input id="timeline_display" name="timeline_display" type="hidden" value="none" ;="" <hr="">
             <ul class="no_marker">
               <a href="https://iwp.uiowa.edu/" target="_blank"><img class='logo-resize' src='images/iwp-logo.png'/></a>
@@ -781,8 +781,11 @@
 
     // on page load...
     window.onload = function() {
-      // click the form submit button
-      formSubmit.click();
+      // Set a timeout to prevent problems with writer info not loading in Chrome
+      setTimeout(() => {
+        // click the form submit button
+        formSubmit.click();
+      }, 100);
     };
 
     // define a function to reset the form upon clicking the "Reset Form" button
