@@ -933,21 +933,11 @@
           // if it is less than or equal to the max_year...
           if (currentYear >= props.min_year && currentYear <= props.max_year) {
             // set the radius using the variable above
-            layer.setRadius(radius);
-            layer.setStyle({
-              opacity: 1,
-              weight: 1,
-              fillOpacity: 0.25
-            });
+            setLayerProperties(layer, radius);
             // otherwise...
           } else {
             // set the radius to zero
-            layer.setRadius(0);
-            layer.setStyle({
-              opacity: 0,
-              weight: 0,
-              fillOpacity: 0
-            });
+            removeLayerProperties(layer);
           };
 
         }
@@ -7312,1627 +7302,185 @@
 
         if (country != 0) {
           if (country == props.country_id && dataYear) {
-            // set the radius using the variable above
-            layer.setRadius(radius);
-            layer.setStyle({
-              opacity: 1,
-              weight: 1,
-              fillOpacity: 0.25
-            });
+            setLayerProperties(layer, radius);
             if (region == props.subregion && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
+              setLayerProperties(layer, radius);
             }
             if (macroRegion == props.region_un && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
+              setLayerProperties(layer, radius);
             }
-            if (updateYear >= props.min_year && updateYear <= props.max_year && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (updateYear == props.min_year && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (dataYear && langValue == 2 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualMultiRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (dataYear && langValue == 2 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeMultiRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (language != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterLangRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (language != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterLangRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (role != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (role != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (gender != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterGenRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (gender != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterGenRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (birth != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterBirthRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (birth != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterBirthRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
+            otherYearConditions(updateYear, props, countValue, layer, radius, annualRadius);
+            multilingualConditions(dataYear, langValue, countValue, layer, annualMultiRadius, cumulativeMultiRadius);
+            languageConditions(language, countValue, layer, annualWriterLangRadius, cumulativeWriterLangRadius);
+            roleConditions(role, countValue, layer, annualWriterRoleRadius, cumulativeWriterRoleRadius);
+            genderConditions(gender, countValue, layer, annualWriterGenRadius, cumulativeWriterGenRadius);
+            birthConditions(birth, countValue, layer, annualWriterBirthRadius, cumulativeWriterBirthRadius);
           } else {
-            layer.setRadius(0);
-            layer.setStyle({
-              opacity: 0,
-              weight: 0,
-              fillOpacity: 0
-            });
+            removeLayerProperties(layer);
           }
         } else if (region != 0) {
           if (region == props.subregion && dataYear) {
-            // set the radius using the variable above
-            layer.setRadius(radius);
-            layer.setStyle({
-              opacity: 1,
-              weight: 1,
-              fillOpacity: 0.25
-            });
+            setLayerProperties(layer, radius);
             if (country == props.Country_ID && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
+              setLayerProperties(layer, radius);
             }
             if (macroRegion == props.region_un && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
+              setLayerProperties(layer, radius);
             }
-            if (updateYear >= props.min_year && updateYear <= props.max_year && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (updateYear == props.min_year && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (dataYear && langValue == 2 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualMultiRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (dataYear && langValue == 2 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeMultiRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (language != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterLangRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (language != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterLangRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (role != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (role != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (gender != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterGenRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (gender != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterGenRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (birth != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterBirthRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (birth != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterBirthRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
+            otherYearConditions(updateYear, props, countValue, layer, radius, annualRadius);
+            multilingualConditions(dataYear, langValue, countValue, layer, annualMultiRadius, cumulativeMultiRadius);
+            languageConditions(language, countValue, layer, annualWriterLangRadius, cumulativeWriterLangRadius);
+            roleConditions(role, countValue, layer, annualWriterRoleRadius, cumulativeWriterRoleRadius);
+            genderConditions(gender, countValue, layer, annualWriterGenRadius, cumulativeWriterGenRadius);
+            birthConditions(birth, countValue, layer, annualWriterBirthRadius, cumulativeWriterBirthRadius);
           } else {
-            layer.setRadius(0);
-            layer.setStyle({
-              opacity: 0,
-              weight: 0,
-              fillOpacity: 0
-            });
+            removeLayerProperties(layer);
           }
         } else if (macroRegion != 0) {
           if (macroRegion == props.region_un && dataYear) {
-            // set the radius using the variable above
-            layer.setRadius(radius);
-            layer.setStyle({
-              opacity: 1,
-              weight: 1,
-              fillOpacity: 0.25
-            });
+            setLayerProperties(layer, radius);
             if (country == props.Country_ID && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
+              setLayerProperties(layer, radius);
             }
             if (region == props.subregion && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
+              setLayerProperties(layer, radius);
             }
-            if (updateYear >= props.min_year && updateYear <= props.max_year && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (updateYear == props.min_year && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (dataYear && langValue == 2 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualMultiRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (dataYear && langValue == 2 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeMultiRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (language != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterLangRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (language != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterLangRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (role != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (role != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (gender != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterGenRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (gender != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterGenRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (birth != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterBirthRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (birth != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterBirthRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
+            otherYearConditions(updateYear, props, countValue, layer, radius, annualRadius);
+            multilingualConditions(dataYear, langValue, countValue, layer, annualMultiRadius, cumulativeMultiRadius);
+            languageConditions(language, countValue, layer, annualWriterLangRadius, cumulativeWriterLangRadius);
+            roleConditions(role, countValue, layer, annualWriterRoleRadius, cumulativeWriterRoleRadius);
+            genderConditions(gender, countValue, layer, annualWriterGenRadius, cumulativeWriterGenRadius);
+            birthConditions(birth, countValue, layer, annualWriterBirthRadius, cumulativeWriterBirthRadius);
           } else {
-            layer.setRadius(0);
-            layer.setStyle({
-              opacity: 0,
-              weight: 0,
-              fillOpacity: 0
-            });
+            removeLayerProperties(layer);
           }
         } else if (updateYear != 0 && countValue == "cumulative") {
           if (updateYear >= props.min_year && updateYear <= props.max_year && countValue == "cumulative") {
             // set the radius using the variable above
-            layer.setRadius(radius);
-            layer.setStyle({
-              opacity: 1,
-              weight: 1,
-              fillOpacity: 0.25
-            });
-            if (country == props.Country_ID && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (region == props.subregion && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (macroRegion == props.region_un && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (dataYear && langValue == 2 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualMultiRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (dataYear && langValue == 2 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeMultiRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (language != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterLangRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (language != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterLangRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (role != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (role != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (gender != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterGenRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (gender != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterGenRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (birth != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterBirthRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (birth != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterBirthRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
+            setLayerProperties(layer, radius);
+            geographicalConditions(country, props, dataYear, region, macroRegion, layer, radius);
+            multilingualConditions(dataYear, langValue, countValue, layer, annualMultiRadius, cumulativeMultiRadius);
+            languageConditions(language, countValue, layer, annualWriterLangRadius, cumulativeWriterLangRadius);
+            roleConditions(role, countValue, layer, annualWriterRoleRadius, cumulativeWriterRoleRadius);
+            genderConditions(gender, countValue, layer, annualWriterGenRadius, cumulativeWriterGenRadius);
+            birthConditions(birth, countValue, layer, annualWriterBirthRadius, cumulativeWriterBirthRadius);
           } else {
-            layer.setRadius(0);
-            layer.setStyle({
-              opacity: 0,
-              weight: 0,
-              fillOpacity: 0
-            });
+            removeLayerProperties(layer);
           }
         } else if (updateYear != 0 && countValue == "annual") {
           if (updateYear == props.min_year && countValue == "annual") {
-            // set the radius using the variable above
-            layer.setRadius(annualRadius);
-            layer.setStyle({
-              opacity: 1,
-              weight: 1,
-              fillOpacity: 0.25
-            });
-            if (country == props.Country_ID && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (region == props.subregion && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (macroRegion == props.region_un && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (dataYear && langValue == 2 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualMultiRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (dataYear && langValue == 2 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeMultiRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (language != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterLangRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (language != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterLangRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (role != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (role != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (gender != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterGenRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (gender != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterGenRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (birth != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterBirthRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (birth != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterBirthRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
+            setLayerProperties(layer, annualRadius);
+            geographicalConditions(country, props, dataYear, region, macroRegion, layer, radius);
+            multilingualConditions(dataYear, langValue, countValue, layer, annualMultiRadius, cumulativeMultiRadius);
+            languageConditions(language, countValue, layer, annualWriterLangRadius, cumulativeWriterLangRadius);
+            roleConditions(role, countValue, layer, annualWriterRoleRadius, cumulativeWriterRoleRadius);
+            genderConditions(gender, countValue, layer, annualWriterGenRadius, cumulativeWriterGenRadius);
+            birthConditions(birth, countValue, layer, annualWriterBirthRadius, cumulativeWriterBirthRadius);
           } else {
-            layer.setRadius(0);
-            layer.setStyle({
-              opacity: 0,
-              weight: 0,
-              fillOpacity: 0
-            });
+            removeLayerProperties(layer);
           }
         } else if (langValue == 2) {
           if (dataYear && langValue == 2 && countValue == "annual") {
-            // set the radius using the variable above
-            layer.setRadius(annualMultiRadius);
-            layer.setStyle({
-              opacity: 1,
-              weight: 1,
-              fillOpacity: 0.25
-            });
-            if (country == props.Country_ID && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (region == props.subregion && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (macroRegion == props.region_un && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (updateYear >= props.min_year && updateYear <= props.max_year && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (updateYear == props.min_year && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (dataYear && langValue == 2 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeMultiRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (language != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterLangRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (language != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterLangRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (role != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (role != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (gender != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterGenRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (gender != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterGenRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (birth != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterBirthRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (birth != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterBirthRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
+            setLayerProperties(layer, annualMultiRadius);
+            geographicalConditions(country, props, dataYear, region, macroRegion, layer, radius);
+            yearConditions(updateYear, props, countValue, dataYear, langValue, layer, radius, annualRadius, cumulativeMultiRadius);
+            languageConditions(language, countValue, layer, annualWriterLangRadius, cumulativeWriterLangRadius);
+            roleConditions(role, countValue, layer, annualWriterRoleRadius, cumulativeWriterRoleRadius);
+            genderConditions(gender, countValue, layer, annualWriterGenRadius, cumulativeWriterGenRadius);
+            birthConditions(birth, countValue, layer, annualWriterBirthRadius, cumulativeWriterBirthRadius);
           } else {
-            layer.setRadius(0);
-            layer.setStyle({
-              opacity: 0,
-              weight: 0,
-              fillOpacity: 0
-            });
+            removeLayerProperties(layer);
           }
         } else if (language != 0) {
           if (dataYear && language != 0 && countValue == "annual") { // IS language != 0 NECESSARY HERE?
-            // set the radius using the variable above
-            layer.setRadius(annualWriterLangRadius);
-            layer.setStyle({
-              opacity: 1,
-              weight: 1,
-              fillOpacity: 0.25
-            });
-            if (country == props.Country_ID && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (region == props.subregion && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (macroRegion == props.region_un && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (updateYear >= props.min_year && updateYear <= props.max_year && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (updateYear == props.min_year && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (dataYear && langValue == 2 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeMultiRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
+            setLayerProperties(layer, annualWriterLangRadius);
+            geographicalConditions(country, props, dataYear, region, macroRegion, layer, radius);
+            yearConditions(updateYear, props, countValue, dataYear, langValue, layer, radius, annualRadius, cumulativeMultiRadius);
             if (language != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterLangRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
+              setLayerProperties(layer, cumulativeWriterLangRadius);
             }
-            if (role != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (role != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (gender != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterGenRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (gender != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterGenRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (birth != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterBirthRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (birth != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterBirthRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
+            roleConditions(role, countValue, layer, annualWriterRoleRadius, cumulativeWriterRoleRadius);
+            genderConditions(gender, countValue, layer, annualWriterGenRadius, cumulativeWriterGenRadius);
+            birthConditions(birth, countValue, layer, annualWriterBirthRadius, cumulativeWriterBirthRadius);
           }
           if (dataYear && language != 0 && countValue == "cumulative") { // IS language != 0 NECESSARY HERE?
-            // set the radius using the variable above
-            layer.setRadius(cumulativeWriterLangRadius);
-            layer.setStyle({
-              opacity: 1,
-              weight: 1,
-              fillOpacity: 0.25
-            });
-            if (country == props.Country_ID && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (region == props.subregion && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (macroRegion == props.region_un && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (updateYear >= props.min_year && updateYear <= props.max_year && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (updateYear == props.min_year && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (dataYear && langValue == 2 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeMultiRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
+            setLayerProperties(layer, cumulativeWriterLangRadius);
+            geographicalConditions(country, props, dataYear, region, macroRegion, layer, radius);
+            yearConditions(updateYear, props, countValue, dataYear, langValue, layer, radius, annualRadius, cumulativeMultiRadius);
             if (language != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterLangRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
+              setLayerProperties(layer, annualWriterLangRadius);
             }
-            if (role != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (role != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (gender != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterGenRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (gender != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterGenRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (birth != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterBirthRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (birth != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterBirthRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
+            roleConditions(role, countValue, layer, annualWriterRoleRadius, cumulativeWriterRoleRadius);
+            genderConditions(gender, countValue, layer, annualWriterGenRadius, cumulativeWriterGenRadius);
+            birthConditions(birth, countValue, layer, annualWriterBirthRadius, cumulativeWriterBirthRadius);
           }
           else {
-            layer.setRadius(0);
-            layer.setStyle({
-              opacity: 0,
-              weight: 0,
-              fillOpacity: 0
-            });
+            removeLayerProperties(layer);
           }
         } else if (birth != 0) {
           if (dataYear && birth != 0 && countValue == "annual") {
-            // set the radius using the variable above
-            layer.setRadius(annualWriterBirthRadius);
-            layer.setStyle({
-              opacity: 1,
-              weight: 1,
-              fillOpacity: 0.25
-            });
-            if (country == props.Country_ID && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (region == props.subregion && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (macroRegion == props.region_un && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (updateYear >= props.min_year && updateYear <= props.max_year && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (updateYear == props.min_year && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (dataYear && langValue == 2 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeMultiRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (language != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterLangRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (language != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterLangRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (role != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (role != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (gender != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterGenRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (gender != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterGenRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
+            setLayerProperties(layer, annualWriterBirthRadius);
+            geographicalConditions(country, props, dataYear, region, macroRegion, layer, radius);
+            yearConditions(updateYear, props, countValue, dataYear, langValue, layer, radius, annualRadius, cumulativeMultiRadius);
+            languageConditions(language, countValue, layer, annualWriterLangRadius, cumulativeWriterLangRadius);
+            roleConditions(role, countValue, layer, annualWriterRoleRadius, cumulativeWriterRoleRadius);
+            genderConditions(gender, countValue, layer, annualWriterGenRadius, cumulativeWriterGenRadius);
             if (birth != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterBirthRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
+              setLayerProperties(layer, cumulativeWriterBirthRadius);
             }
           }
           if (dataYear && birth != 0 && countValue == "cumulative") {
-            // set the radius using the variable above
-            layer.setRadius(cumulativeWriterBirthRadius);
-            layer.setStyle({
-              opacity: 1,
-              weight: 1,
-              fillOpacity: 0.25
-            });
-            if (country == props.Country_ID && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (region == props.subregion && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (macroRegion == props.region_un && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (updateYear >= props.min_year && updateYear <= props.max_year && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (updateYear == props.min_year && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (dataYear && langValue == 2 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeMultiRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (language != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterLangRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (language != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterLangRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (role != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (role != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (gender != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterGenRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (gender != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterGenRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
+            setLayerProperties(layer, cumulativeWriterBirthRadius);
+            geographicalConditions(country, props, dataYear, region, macroRegion, layer, radius);
+            yearConditions(updateYear, props, countValue, dataYear, langValue, layer, radius, annualRadius, cumulativeMultiRadius);
+            languageConditions(language, countValue, layer, annualWriterLangRadius, cumulativeWriterLangRadius);
+            roleConditions(role, countValue, layer, annualWriterRoleRadius, cumulativeWriterRoleRadius);
+            genderConditions(gender, countValue, layer, annualWriterGenRadius, cumulativeWriterGenRadius);
             if (birth != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterBirthRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
+              setLayerProperties(layer, annualWriterBirthRadius);
             }
           }
           else {
-            layer.setRadius(0);
-            layer.setStyle({
-              opacity: 0,
-              weight: 0,
-              fillOpacity: 0
-            });
+            removeLayerProperties(layer);
           }
         }
         else if (gender != 0) {
           if (dataYear && gender != 0 && countValue == "annual") {
-            // set the radius using the variable above
-            layer.setRadius(annualWriterGenRadius);
-            layer.setStyle({
-              opacity: 1,
-              weight: 1,
-              fillOpacity: 0.25
-            });
-            if (country == props.Country_ID && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (region == props.subregion && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (macroRegion == props.region_un && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (updateYear >= props.min_year && updateYear <= props.max_year && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (updateYear == props.min_year && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (dataYear && langValue == 2 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeMultiRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (language != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterLangRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (language != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterLangRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (role != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (role != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
+            setLayerProperties(layer, annualWriterGenRadius);
+            geographicalConditions(country, props, dataYear, region, macroRegion, layer, radius);
+            yearConditions(updateYear, props, countValue, dataYear, langValue, layer, radius, annualRadius, cumulativeMultiRadius);
+            languageConditions(language, countValue, layer, annualWriterLangRadius, cumulativeWriterLangRadius);
+            roleConditions(role, countValue, layer, annualWriterRoleRadius, cumulativeWriterRoleRadius);
             if (gender != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterGenRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
+              setLayerProperties(layer, cumulativeWriterGenRadius);
             }
             if (birth != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterBirthRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
+              setLayerProperties(layer, annualWriterBirthRadius);
             }
           }
           if (dataYear && gender != 0 && countValue == "cumulative") {
-            // set the radius using the variable above
-            layer.setRadius(cumulativeWriterGenRadius);
-            layer.setStyle({
-              opacity: 1,
-              weight: 1,
-              fillOpacity: 0.25
-            });
-            if (country == props.Country_ID && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (region == props.subregion && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (macroRegion == props.region_un && dataYear) {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (updateYear >= props.min_year && updateYear <= props.max_year && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(radius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (updateYear == props.min_year && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (dataYear && langValue == 2 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeMultiRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (language != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterLangRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (language != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterLangRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (role != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
-            if (role != 0 && countValue == "cumulative") {
-              // set the radius using the variable above
-              layer.setRadius(cumulativeWriterRoleRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
-            }
+            setLayerProperties(layer, cumulativeWriterGenRadius);
+            geographicalConditions(country, props, dataYear, region, macroRegion, layer, radius);
+            yearConditions(updateYear, props, countValue, dataYear, langValue, layer, radius, annualRadius, cumulativeMultiRadius);
+            languageConditions(language, countValue, layer, annualWriterLangRadius, cumulativeWriterLangRadius);
+            roleConditions(role, countValue, layer, annualWriterRoleRadius, cumulativeWriterRoleRadius);
             if (gender != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterGenRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
+              setLayerProperties(layer, annualWriterGenRadius);
             }
             if (birth != 0 && countValue == "annual") {
-              // set the radius using the variable above
-              layer.setRadius(annualWriterBirthRadius);
-              layer.setStyle({
-                opacity: 1,
-                weight: 1,
-                fillOpacity: 0.25
-              });
+              setLayerProperties(layer, annualWriterBirthRadius);
             }
           }
           else {
-            layer.setRadius(0);
-            layer.setStyle({
-              opacity: 0,
-              weight: 0,
-              fillOpacity: 0
-            });
+            removeLayerProperties(layer);
           }
         }
         else {
           if (updateYear >= props.min_year && updateYear <= props.max_year) {
             // set the radius using the variable above
-            layer.setRadius(radius);
-            layer.setStyle({
-              opacity: 1,
-              weight: 1,
-              fillOpacity: 0.25
-            });
+            setLayerProperties(layer, radius);
           } else {
-            layer.setRadius(0);
-            layer.setStyle({
-              opacity: 0,
-              weight: 0,
-              fillOpacity: 0
-            });
+            removeLayerProperties(layer);
           }
         }
 
@@ -8940,5 +7488,105 @@
       cumulativePart.addTo(map);
       cumulativePart.bringToFront(); // keep it from falling behind the countries layer
     };
+
+    // function to set the layer properties
+    function setLayerProperties(layer, radius) {
+      layer.setRadius(radius);
+      layer.setStyle({
+        opacity: 1,
+        weight: 1,
+        fillOpacity: 0.25
+      });
+    };
+    
+    // function to remove layer properties
+    function removeLayerProperties(layer) {
+      layer.setRadius(0);
+      layer.setStyle({
+        opacity: 0,
+        weight: 0,
+        fillOpacity: 0
+      });
+    };
+
+    // functions to refer to commonly shared conditions
+    function geographicalConditions(country, props, dataYear, region, macroRegion, layer, radius) {
+            if (country == props.Country_ID && dataYear) {
+              setLayerProperties(layer, radius);
+            }
+            if (region == props.subregion && dataYear) {
+              setLayerProperties(layer, radius);
+            }
+            if (macroRegion == props.region_un && dataYear) {
+              setLayerProperties(layer, radius);
+            }
+    };
+
+    function yearConditions(updateYear, props, countValue, dataYear, langValue, layer, radius, annualRadius, cumulativeMultiRadius) {
+            if (updateYear >= props.min_year && updateYear <= props.max_year && countValue == "cumulative") {
+              setLayerProperties(layer, radius);
+            }
+            if (updateYear == props.min_year && countValue == "annual") {
+              setLayerProperties(layer, annualRadius);
+            }
+            if (dataYear && langValue == 2 && countValue == "cumulative") {
+              setLayerProperties(layer, cumulativeMultiRadius);
+            }
+    };
+
+    function otherYearConditions(updateYear, props, countValue, layer, radius, annualRadius) {
+            if (updateYear >= props.min_year && updateYear <= props.max_year && countValue == "cumulative") {
+              setLayerProperties(layer, radius);
+            }
+            if (updateYear == props.min_year && countValue == "annual") {
+              setLayerProperties(layer, annualRadius);
+            }      
+    };
+
+    function languageConditions(language, countValue, layer, annualWriterLangRadius, cumulativeWriterLangRadius) {
+            if (language != 0 && countValue == "annual") {
+              setLayerProperties(layer, annualWriterLangRadius);
+            }
+            if (language != 0 && countValue == "cumulative") {
+              setLayerProperties(layer, cumulativeWriterLangRadius);
+            }
+    };
+
+    function multilingualConditions(dataYear, langValue, countValue, layer, annualMultiRadius, cumulativeMultiRadius) {
+            if (dataYear && langValue == 2 && countValue == "annual") {
+              setLayerProperties(layer, annualMultiRadius);
+            }
+            if (dataYear && langValue == 2 && countValue == "cumulative") {
+              setLayerProperties(layer, cumulativeMultiRadius);
+            }
+    };
+
+    function roleConditions(role, countValue, layer, annualWriterRoleRadius, cumulativeWriterRoleRadius) {
+            if (role != 0 && countValue == "annual") {
+              setLayerProperties(layer, annualWriterRoleRadius);
+            }
+            if (role != 0 && countValue == "cumulative") {
+              setLayerProperties(layer, cumulativeWriterRoleRadius);
+            }
+    };
+
+    function genderConditions(gender, countValue, layer, annualWriterGenRadius, cumulativeWriterGenRadius) {
+            if (gender != 0 && countValue == "annual") {
+              setLayerProperties(layer, annualWriterGenRadius);
+            }
+            if (gender != 0 && countValue == "cumulative") {
+              setLayerProperties(layer, cumulativeWriterGenRadius);
+            }
+    };
+
+    function birthConditions(birth, countValue, layer, annualWriterBirthRadius, cumulativeWriterBirthRadius) {
+            if (birth != 0 && countValue == "annual") {
+              setLayerProperties(layer, annualWriterBirthRadius);
+            }
+            if (birth != 0 && countValue == "cumulative") {
+              setLayerProperties(layer, cumulativeWriterBirthRadius);
+            }
+    };
+
   </script>
 </html>
